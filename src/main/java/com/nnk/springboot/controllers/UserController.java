@@ -19,14 +19,14 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping("/user/list")
+    @RequestMapping("/user/list") //ok
     public String home(Model model)
     {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/user/add")
+    @GetMapping("/user/add") //ok
     public String addUser(User bid) {
         return "user/add";
     }
@@ -43,7 +43,7 @@ public class UserController {
         return "user/add";
     }
 
-    @GetMapping("/user/update/{id}")
+    @GetMapping("/user/update/{id}") //ok
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         user.setPassword("");
