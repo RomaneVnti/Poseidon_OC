@@ -1,5 +1,6 @@
 package com.nnk.springboot.controllers;
 
+import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,12 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository;
 
+
     @GetMapping("login")
-    public ModelAndView login() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("login");
-        return mav;
+    public String login() {
+        return "login";
     }
+
 
     @GetMapping("secure/article-details")
     public ModelAndView getAllUserArticles() {

@@ -37,11 +37,15 @@ public class UserController {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
-            model.addAttribute("users", userRepository.findAll());
-            return "redirect:/user/list";
+            // Pas besoin d'ajouter users ici, car on ne va plus vers la liste
+
+            // Redirection vers la page de login
+            return "redirect:/app/login";
+            // Remplace /app/login par l'URL exacte de ta page login si besoin
         }
         return "user/add";
     }
+
 
     @GetMapping("/user/update/{id}") //ok
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
