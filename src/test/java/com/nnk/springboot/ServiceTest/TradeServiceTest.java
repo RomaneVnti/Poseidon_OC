@@ -11,6 +11,20 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests unitaires pour la classe {@link TradeService}.
+ * <p>
+ * Cette classe teste les opérations CRUD fournies par le service {@code TradeService}
+ * en simulant les interactions avec le {@link TradeRepository} via Mockito.
+ * </p>
+ * <ul>
+ *   <li>Test de la récupération de toutes les transactions (trades).</li>
+ *   <li>Test de la récupération d'une transaction par identifiant, avec succès et cas d'absence.</li>
+ *   <li>Test de l'ajout d'une nouvelle transaction.</li>
+ *   <li>Test de la mise à jour d'une transaction existante, avec gestion du cas où elle n'existe pas.</li>
+ *   <li>Test de la suppression d'une transaction, avec gestion du cas où elle n'existe pas.</li>
+ * </ul>
+ */
 class TradeServiceTest {
 
     @InjectMocks
@@ -21,6 +35,9 @@ class TradeServiceTest {
 
     private Trade trade;
 
+    /**
+     * Initialise les mocks et crée un objet {@link Trade} exemple avant chaque test.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -31,6 +48,10 @@ class TradeServiceTest {
         trade.setBuyQuantity(100.0);
     }
 
+    /**
+     * Teste la récupération de toutes les transactions.
+     * Vérifie que la liste retournée correspond à la liste simulée.
+     */
     @Test
     void getAllTrade_shouldReturnTradeList() {
         List<Trade> trades = Arrays.asList(trade);
@@ -42,6 +63,10 @@ class TradeServiceTest {
         verify(tradeRepository).findAll();
     }
 
+    /**
+     * Teste la récupération d'une transaction par identifiant lorsque trouvée.
+     * Vérifie que l'objet retourné n'est pas nul et correspond à la transaction attendue.
+     */
     @Test
     void getTradeById_shouldReturnTrade_whenFound() {
         when(tradeRepository.findById(1)).thenReturn(Optional.of(trade));
@@ -53,6 +78,10 @@ class TradeServiceTest {
         verify(tradeRepository).findById(1);
     }
 
+    /**
+     * Teste la récupération d'une transaction par identifiant lorsque non trouvée.
+     * Vérifie qu'une {@link RuntimeException} est levée.
+     */
     @Test
     void getTradeById_shouldThrowException_whenNotFound() {
         when(tradeRepository.findById(1)).thenReturn(Optional.empty());
@@ -61,6 +90,10 @@ class TradeServiceTest {
         verify(tradeRepository).findById(1);
     }
 
+    /**
+     * Teste l'ajout d'une nouvelle transaction.
+     * Vérifie que la transaction sauvegardée n'est pas nulle et correspond à l'entrée.
+     */
     @Test
     void addTrade_shouldReturnSavedTrade() {
         when(tradeRepository.save(trade)).thenReturn(trade);
@@ -72,6 +105,10 @@ class TradeServiceTest {
         verify(tradeRepository).save(trade);
     }
 
+    /**
+     * Teste la mise à jour d'une transaction existante.
+     * Vérifie que les champs sont bien mis à jour et que la sauvegarde est effectuée.
+     */
     @Test
     void updateTrade_shouldReturnUpdatedTrade_whenFound() {
         Trade updated = new Trade();
@@ -92,6 +129,10 @@ class TradeServiceTest {
         verify(tradeRepository).save(trade);
     }
 
+    /**
+     * Teste la mise à jour d'une transaction inexistante.
+     * Vérifie qu'une {@link RuntimeException} est levée et qu'aucune sauvegarde n'est réalisée.
+     */
     @Test
     void updateTrade_shouldThrowException_whenNotFound() {
         when(tradeRepository.findById(1)).thenReturn(Optional.empty());
@@ -101,6 +142,10 @@ class TradeServiceTest {
         verify(tradeRepository, never()).save(any());
     }
 
+    /**
+     * Teste la suppression d'une transaction existante.
+     * Vérifie que la méthode delete est appelée avec l'objet correct.
+     */
     @Test
     void deleteTrade_shouldDeleteTrade_whenFound() {
         when(tradeRepository.findById(1)).thenReturn(Optional.of(trade));
@@ -111,6 +156,10 @@ class TradeServiceTest {
         verify(tradeRepository).delete(trade);
     }
 
+    /**
+     * Teste la suppression d'une transaction inexistante.
+     * Vérifie qu'une {@link RuntimeException} est levée et qu'aucune suppression n'est effectuée.
+     */
     @Test
     void deleteTrade_shouldThrowException_whenNotFound() {
         when(tradeRepository.findById(1)).thenReturn(Optional.empty());

@@ -14,33 +14,49 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.nnk.springboot.services.CustomUserDetailService;
 
+/**
+ * Classe de configuration de la sécurité Spring Security.
+ * Elle définit les règles d'accès, la gestion de l'authentification,
+ * le chiffrement des mots de passe, et la redirection des utilisateurs.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private Logger logger = LogManager.getLogger(SecurityConfig.class);
+    private static final Logger logger = LogManager.getLogger(SecurityConfig.class);
 
     @Autowired
     private CustomUserDetailService customUserDetailService;
 
+    /**
+     * Définit la chaîne de filtres de sécurité HTTP.
+     *
+     * @param http l'objet HttpSecurity à configurer
+     * @return la chaîne de filtres de sécurité
+     * @throws Exception en cas d'erreur de configuration
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configuration des règles de sécurité");
 
         http
-                .csrf(csrf -> csrf.disable())  // désactivation CSRF si pas besoin (adapter selon besoin)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Pages accessibles sans authentification
-                        .requestMatchers("/app/login", "/css/**", "/js/**", "/images/**").permitAll()
-                        // Seul ADMIN peut accéder à /user/list
+                        .requestMatchers(
+                                "/app/login",
+                                "/user/add",
+                                "/user/validate",   // <-- Ajouté ici
+                                "/css/**",
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
                         .requestMatchers("/user/list").hasRole("ADMIN")
-                        // Toutes les autres requêtes doivent être authentifiées
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/app/login")           // URL du formulaire de login
-                        .loginProcessingUrl("/login")      // URL POST pour soumettre login/password
-                        .defaultSuccessUrl("/home", true)  // TOUS les utilisateurs redirigés vers /home après login
+                        .loginPage("/app/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -55,18 +71,33 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Fournit un encodeur de mot de passe basé sur BCrypt.
+     *
+     * @return une instance de BCryptPasswordEncoder
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         logger.debug("Initialisation du BCryptPasswordEncoder");
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configure le gestionnaire d'authentification avec le service de détails utilisateur personnalisé.
+     *
+     * @param http l'objet HttpSecurity
+     * @param bCryptPasswordEncoder l'encodeur de mot de passe à utiliser
+     * @return l'AuthenticationManager configuré
+     * @throws Exception en cas d'erreur de configuration
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
         logger.info("Configuration du gestionnaire d'authentification");
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(customUserDetailService).passwordEncoder(bCryptPasswordEncoder);
+        authenticationManagerBuilder
+                .userDetailsService(customUserDetailService)
+                .passwordEncoder(bCryptPasswordEncoder);
 
         logger.info("Gestionnaire d'authentification configuré avec succès");
 

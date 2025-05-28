@@ -82,7 +82,7 @@
 .form-group:last-child {
   display: flex;
   justify-content: center;
-  gap: 15px; /* espace entre les boutons */
+  gap: 15px;
   margin-top: 10px;
 }
 

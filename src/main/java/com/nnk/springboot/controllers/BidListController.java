@@ -18,9 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
 
-
 /**
- * Contrôleur pour la gestion des BidList.
+ * Contrôleur Spring MVC pour la gestion des entités {@link BidList}.
+ * Gère les opérations CRUD (Create, Read, Update, Delete) pour les BidList.
  */
 @Controller
 public class BidListController {
@@ -33,12 +33,11 @@ public class BidListController {
     /**
      * Affiche la liste des BidList.
      *
-     * @param model Modèle pour la vue
-     * @return La page bidList/list
-     * @throws Exception si une erreur survient
+     * @param model le modèle utilisé pour passer les données à la vue
+     * @return la vue "bidList/list"
      */
     @GetMapping("/bidList/list")
-    public String home(Model model) throws Exception {
+    public String home(Model model) {
         logger.info("Entrée dans la méthode home - Récupération de la liste des BidList");
         try {
             List<BidList> bidLists = bidListService.getAllBid();
@@ -51,10 +50,10 @@ public class BidListController {
     }
 
     /**
-     * Affiche le formulaire pour ajouter un nouveau BidList.
+     * Affiche le formulaire d'ajout d'un nouveau BidList.
      *
-     * @param bid Objet BidList vide pour le formulaire
-     * @return La page bidList/add
+     * @param bid un objet {@link BidList} vide pour le formulaire
+     * @return la vue "bidList/add"
      */
     @GetMapping("/bidList/add")
     public String addBidForm(BidList bid) {
@@ -63,12 +62,12 @@ public class BidListController {
     }
 
     /**
-     * Valide et ajoute un nouveau BidList.
+     * Valide et enregistre un nouveau BidList.
      *
-     * @param bid    Objet BidList à ajouter
-     * @param result Résultat de la validation
-     * @param model  Modèle pour la vue
-     * @return Redirection vers la liste des BidList si succès, sinon retour au formulaire d'ajout
+     * @param bid                l'objet {@link BidList} soumis
+     * @param result             les résultats de la validation
+     * @param redirectAttributes attributs pour les messages flash
+     * @return redirection vers "/bidList/list" en cas de succès, sinon retour à "bidList/add"
      */
     @PostMapping("/bidList/validate")
     public String validate(@Valid BidList bid, BindingResult result, RedirectAttributes redirectAttributes) {
@@ -85,14 +84,12 @@ public class BidListController {
         return "redirect:/bidList/list";
     }
 
-
-
     /**
-     * Affiche le formulaire de mise à jour d'un BidList.
+     * Affiche le formulaire de mise à jour d'un BidList existant.
      *
-     * @param id    ID du BidList à mettre à jour
-     * @param model Modèle pour la vue
-     * @return La page bidList/update
+     * @param id    l'identifiant du BidList à modifier
+     * @param model le modèle utilisé pour la vue
+     * @return la vue "bidList/update", ou redirection vers "/bidList/list" si non trouvé
      */
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
@@ -111,11 +108,11 @@ public class BidListController {
     /**
      * Met à jour un BidList existant.
      *
-     * @param id       ID du BidList à mettre à jour
-     * @param bidList  Objet BidList mis à jour
-     * @param result   Résultat de la validation
-     * @param model    Modèle pour la vue
-     * @return Redirection vers la liste des BidList si succès, sinon retour au formulaire de mise à jour
+     * @param id       l'identifiant du BidList à modifier
+     * @param bidList  l'objet {@link BidList} mis à jour
+     * @param result   les résultats de la validation
+     * @param model    le modèle utilisé pour la vue
+     * @return redirection vers "/bidList/list" en cas de succès, sinon retour à "bidList/update"
      */
     @PostMapping("/bidList/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
@@ -134,11 +131,11 @@ public class BidListController {
     }
 
     /**
-     * Supprime un BidList.
+     * Supprime un BidList par son identifiant.
      *
-     * @param id ID du BidList à supprimer
-     * @param model Modèle pour la vue
-     * @return Redirection vers la liste des BidList après suppression
+     * @param id    l'identifiant du BidList à supprimer
+     * @param model le modèle utilisé pour la vue
+     * @return redirection vers "/bidList/list"
      */
     @GetMapping("/bidList/delete/{id}")
     public String deleteBid(@PathVariable("id") Integer id, Model model) {

@@ -2,12 +2,16 @@ com/nnk/springboot/ControllerTest/TradeControllerTest.class
 com/nnk/springboot/ControllerTest/RatingControllerTest.class
 com/nnk/springboot/ControllerTest/BidListControllerTest.class
 com/nnk/springboot/ServiceTest/RatingServiceTest.class
+com/nnk/springboot/ControllerTest/LoginControllerTest.class
+com/nnk/springboot/ControllerTest/ErrorControllerTest.class
 com/nnk/springboot/ExceptionTest/UserExistingExceptionTest.class
 com/nnk/springboot/ServiceTest/CurvePointServiceTest$1.class
+com/nnk/springboot/ControllerTest/HomeControllerTest.class
 com/nnk/springboot/ControllerTest/UserControllerTest.class
 com/nnk/springboot/ServiceTest/TradeServiceTest.class
 com/nnk/springboot/ServiceTest/CurvePointServiceTest$5.class
 com/nnk/springboot/ServiceTest/RuleNameServiceTest.class
+com/nnk/springboot/ServiceTest/CustomUserDetailServiceTest.class
 com/nnk/springboot/ControllerTest/RuleNameControllerTest.class
 com/nnk/springboot/ServiceTest/BidListServiceTest.class
 com/nnk/springboot/ServiceTest/CurvePointServiceTest$4.class

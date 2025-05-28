@@ -1,7 +1,6 @@
 com/nnk/springboot/domain/BidList.class
 com/nnk/springboot/config/CustomAuthenticationSuccessHandler.class
 com/nnk/springboot/services/CurvePointService.class
-exception/UserExistingException.class
 com/nnk/springboot/repositories/BidListRepository.class
 com/nnk/springboot/services/CustomUserDetailService.class
 com/nnk/springboot/controllers/CurveController.class
@@ -19,11 +18,12 @@ com/nnk/springboot/Application.class
 com/nnk/springboot/controllers/ErrorController.class
 com/nnk/springboot/services/RuleNameService.class
 com/nnk/springboot/controllers/LoginController.class
-exception/GlobalHandlerException.class
+com/nnk/springboot/exception/UserExistingException.class
 com/nnk/springboot/services/RatingService.class
 com/nnk/springboot/services/UserService.class
 com/nnk/springboot/domain/RuleName.class
 com/nnk/springboot/controllers/UserController.class
+com/nnk/springboot/exception/GlobalHandlerException.class
 com/nnk/springboot/domain/CurvePoint.class
 com/nnk/springboot/repositories/TradeRepository.class
 com/nnk/springboot/controllers/BidListController.class

@@ -25,17 +25,23 @@ class CurvePointServiceTest {
 
     private CurvePoint sampleCurvePoint;
 
+    /**
+     * Initialisation avant chaque test : création d'un objet CurvePoint de test
+     * avec un id, un terme et une valeur.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         sampleCurvePoint = new CurvePoint();
         sampleCurvePoint.setId(1);
-
         sampleCurvePoint.setTerm(BigDecimal.valueOf(10.0));
         sampleCurvePoint.setValue(BigDecimal.valueOf(20.0));
     }
 
-    // getCurvePointById - succès
+    /**
+     * Test de la méthode getCurvePointById() pour un cas réussi.
+     * Vérifie que l'objet retourné n'est pas nul et correspond à l'id demandé.
+     */
     @Test
     void testGetCurvePointByIdSuccess() {
         when(curvePointRepository.findById(1)).thenReturn(Optional.of(sampleCurvePoint));
@@ -47,8 +53,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).findById(1);
     }
 
-
-    // getCurvePointById - exception repository
+    /**
+     * Test de la méthode getCurvePointById() lorsqu'une exception est levée par le repository.
+     * Vérifie que l'exception RuntimeException est bien propagée avec un message approprié.
+     */
     @Test
     void testGetCurvePointByIdThrowsException() {
         when(curvePointRepository.findById(anyInt())).thenThrow(new DataAccessException("DB error") {});
@@ -60,7 +68,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).findById(1);
     }
 
-    // getAllCurvePoint - succès
+    /**
+     * Test de la méthode getAllCurvePoint() pour un cas réussi.
+     * Vérifie que la liste retournée contient bien les CurvePoints attendus.
+     */
     @Test
     void testGetAllCurvePointSuccess() {
         List<CurvePoint> list = Arrays.asList(sampleCurvePoint);
@@ -72,7 +83,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).findAll();
     }
 
-    // getAllCurvePoint - exception repository
+    /**
+     * Test de la méthode getAllCurvePoint() lorsqu'une exception est levée par le repository.
+     * Vérifie que l'exception RuntimeException est bien propagée avec un message approprié.
+     */
     @Test
     void testGetAllCurvePointThrowsException() {
         when(curvePointRepository.findAll()).thenThrow(new DataAccessException("DB error") {});
@@ -84,7 +98,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).findAll();
     }
 
-    // addCurvePoint - succès
+    /**
+     * Test de la méthode addCurvePoint() pour un cas réussi.
+     * Vérifie que l'objet CurvePoint ajouté est bien retourné.
+     */
     @Test
     void testAddCurvePointSuccess() {
         when(curvePointRepository.save(sampleCurvePoint)).thenReturn(sampleCurvePoint);
@@ -96,7 +113,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).save(sampleCurvePoint);
     }
 
-    // addCurvePoint - exception repository
+    /**
+     * Test de la méthode addCurvePoint() lorsqu'une exception est levée par le repository.
+     * Vérifie que l'exception RuntimeException est bien propagée avec un message approprié.
+     */
     @Test
     void testAddCurvePointThrowsException() {
         when(curvePointRepository.save(any(CurvePoint.class))).thenThrow(new DataAccessException("DB error") {});
@@ -108,13 +128,15 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).save(sampleCurvePoint);
     }
 
-    // updateCurvePoint - succès
+    /**
+     * Test de la méthode updateCurvePoint() pour un cas réussi.
+     * Vérifie que l'objet CurvePoint est bien mis à jour et retourné.
+     */
     @Test
     void testUpdateCurvePointSuccess() {
         CurvePoint updateData = new CurvePoint();
         updateData.setTerm(BigDecimal.valueOf(50.0));
         updateData.setValue(BigDecimal.valueOf(60.0));
-
 
         when(curvePointRepository.findById(1)).thenReturn(Optional.of(sampleCurvePoint));
         when(curvePointRepository.save(any(CurvePoint.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -124,19 +146,19 @@ class CurvePointServiceTest {
         assertEquals(BigDecimal.valueOf(50.0), updated.getTerm());
         assertEquals(BigDecimal.valueOf(60.0), updated.getValue());
 
-
         verify(curvePointRepository, times(1)).findById(1);
         verify(curvePointRepository, times(1)).save(sampleCurvePoint);
     }
 
-
-    // updateCurvePoint - exception repository save
+    /**
+     * Test de la méthode updateCurvePoint() lorsqu'une exception est levée lors de la sauvegarde.
+     * Vérifie que l'exception RuntimeException est bien propagée avec un message approprié.
+     */
     @Test
     void testUpdateCurvePointSaveThrowsException() {
         CurvePoint updateData = new CurvePoint();
         updateData.setTerm(BigDecimal.valueOf(50.0));
         updateData.setValue(BigDecimal.valueOf(60.0));
-
 
         when(curvePointRepository.findById(1)).thenReturn(Optional.of(sampleCurvePoint));
         when(curvePointRepository.save(any(CurvePoint.class))).thenThrow(new DataAccessException("DB error") {});
@@ -149,7 +171,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).save(sampleCurvePoint);
     }
 
-    // deleteCurvePoint - succès
+    /**
+     * Test de la méthode deleteCurvePoint() pour un cas réussi.
+     * Vérifie que la suppression ne génère pas d'exception.
+     */
     @Test
     void testDeleteCurvePointSuccess() {
         when(curvePointRepository.findById(1)).thenReturn(Optional.of(sampleCurvePoint));
@@ -161,10 +186,10 @@ class CurvePointServiceTest {
         verify(curvePointRepository, times(1)).delete(sampleCurvePoint);
     }
 
-
-
-
-    // deleteCurvePoint - exception repository delete
+    /**
+     * Test de la méthode deleteCurvePoint() lorsqu'une exception est levée lors de la suppression.
+     * Vérifie que l'exception RuntimeException est bien propagée avec un message approprié.
+     */
     @Test
     void testDeleteCurvePointDeleteThrowsException() {
         when(curvePointRepository.findById(1)).thenReturn(Optional.of(sampleCurvePoint));

@@ -1,6 +1,8 @@
+/Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/ErrorControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/BidListControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ServiceTest/RatingServiceTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ServiceTest/TradeServiceTest.java
+/Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/LoginControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ServiceTest/UserServiceTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/RatingControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/TradeControllerTest.java
@@ -8,6 +10,8 @@
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/CurveControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ExceptionTest/UserExistingExceptionTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ServiceTest/CurvePointServiceTest.java
+/Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ServiceTest/CustomUserDetailServiceTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/UserControllerTest.java
+/Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/HomeControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ControllerTest/RuleNameControllerTest.java
 /Users/lunoroli/Library/Mobile Documents/com~apple~CloudDocs/ROMANE/ÉTUDES/OPENCLASSROOMS/Projet_7/Poseiden-skeleton/src/test/java/com/nnk/springboot/ServiceTest/BidListServiceTest.java

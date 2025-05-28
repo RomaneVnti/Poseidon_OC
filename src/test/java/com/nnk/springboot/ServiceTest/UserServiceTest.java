@@ -3,7 +3,7 @@ package com.nnk.springboot.ServiceTest;
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
 import com.nnk.springboot.services.UserService;
-import exception.UserExistingException;
+import com.nnk.springboot.exception.UserExistingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,6 +18,21 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests unitaires pour la classe {@link UserService}.
+ * <p>
+ * Cette classe teste les fonctionnalités de gestion des utilisateurs dans le service {@code UserService},
+ * en simulant les interactions avec le {@link UserRepository} et l'encodeur de mot de passe {@link BCryptPasswordEncoder}
+ * via Mockito.
+ * </p>
+ * <ul>
+ *   <li>Test de la récupération de tous les utilisateurs.</li>
+ *   <li>Test de la récupération d'un utilisateur par identifiant.</li>
+ *   <li>Test de l'ajout d'un nouvel utilisateur, avec gestion du cas où l'utilisateur existe déjà.</li>
+ *   <li>Test de la mise à jour d'un utilisateur, avec gestion du cas où le nom d'utilisateur est déjà utilisé.</li>
+ *   <li>Test de la suppression d'un utilisateur.</li>
+ * </ul>
+ */
 class UserServiceTest {
 
     @Mock
@@ -31,6 +46,9 @@ class UserServiceTest {
 
     private User user;
 
+    /**
+     * Initialise les mocks et crée un utilisateur exemple avant chaque test.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -42,6 +60,10 @@ class UserServiceTest {
         user.setRole("USER");
     }
 
+    /**
+     * Teste la récupération de tous les utilisateurs.
+     * Vérifie que la liste retournée contient bien l'utilisateur simulé.
+     */
     @Test
     void getAllUsers_shouldReturnUserList() {
         when(userRepository.findAll()).thenReturn(Arrays.asList(user));
@@ -52,6 +74,10 @@ class UserServiceTest {
         verify(userRepository, times(1)).findAll();
     }
 
+    /**
+     * Teste la récupération d'un utilisateur par son identifiant.
+     * Vérifie que l'utilisateur retourné correspond à celui attendu.
+     */
     @Test
     void getUserById_shouldReturnUser() {
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
@@ -63,6 +89,10 @@ class UserServiceTest {
         verify(userRepository, times(1)).findById(1);
     }
 
+    /**
+     * Teste l'ajout d'un nouvel utilisateur.
+     * Vérifie que le mot de passe est encodé et que l'utilisateur est sauvegardé.
+     */
     @Test
     void addUser_shouldSaveUser() {
         when(userRepository.findByUsername("testuser")).thenReturn(null);
@@ -75,6 +105,10 @@ class UserServiceTest {
         verify(userRepository).save(any(User.class));
     }
 
+    /**
+     * Teste l'ajout d'un utilisateur lorsque le nom d'utilisateur existe déjà.
+     * Vérifie qu'une {@link UserExistingException} est levée.
+     */
     @Test
     void addUser_shouldThrowException_whenUserExists() {
         when(userRepository.findByUsername("testuser")).thenReturn(user);
@@ -82,6 +116,10 @@ class UserServiceTest {
         assertThrows(UserExistingException.class, () -> userService.addUser(user));
     }
 
+    /**
+     * Teste la mise à jour d'un utilisateur existant.
+     * Vérifie que le mot de passe est encodé et que les modifications sont sauvegardées.
+     */
     @Test
     void updateUser_shouldUpdateUser() {
         User updatedUser = new User();
@@ -101,6 +139,10 @@ class UserServiceTest {
         verify(userRepository).save(any(User.class));
     }
 
+    /**
+     * Teste la mise à jour d'un utilisateur lorsque le nouveau nom d'utilisateur est déjà pris.
+     * Vérifie qu'une {@link UserExistingException} est levée.
+     */
     @Test
     void updateUser_shouldThrowException_whenUsernameAlreadyExists() {
         User anotherUser = new User();
@@ -112,6 +154,10 @@ class UserServiceTest {
         assertThrows(UserExistingException.class, () -> userService.updateUser(1, anotherUser));
     }
 
+    /**
+     * Teste la suppression d'un utilisateur existant.
+     * Vérifie que la méthode de suppression est appelée avec l'utilisateur correct.
+     */
     @Test
     void deleteUser_shouldDeleteUser() {
         when(userRepository.findById(1)).thenReturn(Optional.of(user));

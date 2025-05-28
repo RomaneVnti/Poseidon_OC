@@ -20,8 +20,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * Test d'intégration du contrôleur BidListController via MockMvc.
+ * Les filtres de sécurité Spring Security sont désactivés ici.
+ */
 @WebMvcTest(BidListController.class)
-@AutoConfigureMockMvc(addFilters = false)  // désactive Spring Security pour tests
+@AutoConfigureMockMvc(addFilters = false)
 public class BidListControllerTest {
 
     @Autowired
@@ -30,6 +34,9 @@ public class BidListControllerTest {
     @MockBean
     private BidListService bidListService;
 
+    /**
+     * Vérifie que l'affichage de la liste des BidList fonctionne correctement.
+     */
     @Test
     public void testHome_shouldReturnBidListViewWithModel() throws Exception {
         BidList bid = new BidList();
@@ -46,6 +53,9 @@ public class BidListControllerTest {
         verify(bidListService, times(1)).getAllBid();
     }
 
+    /**
+     * Vérifie que l'accès au formulaire d'ajout retourne bien la vue correspondante.
+     */
     @Test
     public void testAddBidForm_shouldReturnAddView() throws Exception {
         mockMvc.perform(get("/bidList/add"))
@@ -53,6 +63,9 @@ public class BidListControllerTest {
                 .andExpect(view().name("bidList/add"));
     }
 
+    /**
+     * Vérifie qu'une soumission valide redirige vers la liste des bids avec un flash info.
+     */
     @Test
     public void testValidate_withValidBid_shouldRedirectToList() throws Exception {
         BidList bid = new BidList();
@@ -72,11 +85,14 @@ public class BidListControllerTest {
         verify(bidListService, times(1)).addBid(any(BidList.class));
     }
 
+    /**
+     * Vérifie que des erreurs de validation retournent le formulaire d'ajout avec erreurs.
+     */
     @Test
     public void testValidate_withValidationErrors_shouldReturnAddView() throws Exception {
         mockMvc.perform(post("/bidList/validate")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("account", "")  // champ vide -> erreur validation
+                        .param("account", "")
                         .param("type", "type1")
                         .param("bidQuantity", "10"))
                 .andExpect(status().isOk())
@@ -86,6 +102,9 @@ public class BidListControllerTest {
         verify(bidListService, never()).addBid(any(BidList.class));
     }
 
+    /**
+     * Vérifie que l'affichage du formulaire de mise à jour fonctionne pour un ID existant.
+     */
     @Test
     public void testShowUpdateForm_withExistingId_shouldReturnUpdateView() throws Exception {
         BidList bid = new BidList();
@@ -102,6 +121,9 @@ public class BidListControllerTest {
         verify(bidListService, times(1)).getBidById(1);
     }
 
+    /**
+     * Vérifie que si l'ID est inexistant, l'utilisateur est redirigé vers la liste.
+     */
     @Test
     public void testShowUpdateForm_withNonExistingId_shouldRedirectToList() throws Exception {
         when(bidListService.getBidById(1)).thenReturn(null);
@@ -113,6 +135,9 @@ public class BidListControllerTest {
         verify(bidListService, times(1)).getBidById(1);
     }
 
+    /**
+     * Vérifie que la mise à jour avec des données valides redirige vers la liste.
+     */
     @Test
     public void testUpdateBid_withValidBid_shouldRedirectToList() throws Exception {
         when(bidListService.updateBidList(eq(1), any(BidList.class))).thenReturn(new BidList());
@@ -128,12 +153,14 @@ public class BidListControllerTest {
         verify(bidListService, times(1)).updateBidList(eq(1), any(BidList.class));
     }
 
-
+    /**
+     * Vérifie qu'une mise à jour avec erreur de validation renvoie le formulaire de mise à jour.
+     */
     @Test
     public void testUpdateBid_withValidationErrors_shouldReturnUpdateView() throws Exception {
         mockMvc.perform(post("/bidList/update/1")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("account", "")  // erreur validation (champ vide)
+                        .param("account", "")
                         .param("type", "type1")
                         .param("bidQuantity", "15"))
                 .andExpect(status().isOk())
@@ -143,6 +170,9 @@ public class BidListControllerTest {
         verify(bidListService, never()).updateBidList(anyInt(), any(BidList.class));
     }
 
+    /**
+     * Vérifie que la suppression d'un Bid redirige correctement vers la liste.
+     */
     @Test
     public void testDeleteBid_shouldRedirectToList() throws Exception {
         doNothing().when(bidListService).deleteBidList(1);

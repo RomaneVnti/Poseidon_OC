@@ -2,76 +2,119 @@
 
 import com.nnk.springboot.domain.User;
 import com.nnk.springboot.repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-
+/**
+ * Contrôleur responsable de la gestion des utilisateurs (ajout, modification, suppression, affichage).
+ */
 @Controller
-<span class="fc" id="L18">public class UserController {</span>
+<span class="fc" id="L17">public class UserController {</span>
+
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(&quot;/user/list&quot;) //ok
-    public String home(Model model)
-    {
-<span class="fc" id="L25">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
-<span class="fc" id="L26">        return &quot;user/list&quot;;</span>
+    /**
+     * Affiche la liste de tous les utilisateurs.
+     *
+     * @param model Le modèle pour transmettre les données à la vue
+     * @return La vue &quot;user/list&quot;
+     */
+    @RequestMapping(&quot;/user/list&quot;)
+    public String home(Model model) {
+<span class="fc" id="L30">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
+<span class="fc" id="L31">        return &quot;user/list&quot;;</span>
     }
 
-    @GetMapping(&quot;/user/add&quot;) //ok
-    public String addUser(User bid) {
-<span class="fc" id="L31">        return &quot;user/add&quot;;</span>
+    /**
+     * Affiche le formulaire pour ajouter un nouvel utilisateur.
+     *
+     * @param user Objet User vide pour le formulaire
+     * @return La vue &quot;user/add&quot;
+     */
+    @GetMapping(&quot;/user/add&quot;)
+    public String addUser(User user) {
+<span class="fc" id="L42">        return &quot;user/add&quot;;</span>
     }
 
+    /**
+     * Valide et enregistre un nouvel utilisateur.
+     *
+     * @param user   L'utilisateur à valider
+     * @param result Le résultat de la validation
+     * @param model  Le modèle pour la vue
+     * @return Redirection vers la page de login si succès, sinon retour au formulaire
+     */
     @PostMapping(&quot;/user/validate&quot;)
     public String validate(@Valid User user, BindingResult result, Model model) {
-<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (!result.hasErrors()) {</span>
-<span class="fc" id="L37">            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
-<span class="fc" id="L38">            user.setPassword(encoder.encode(user.getPassword()));</span>
-<span class="fc" id="L39">            userRepository.save(user);</span>
-<span class="fc" id="L40">            model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
-<span class="fc" id="L41">            return &quot;redirect:/user/list&quot;;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (!result.hasErrors()) {</span>
+<span class="fc" id="L56">            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L57">            user.setPassword(encoder.encode(user.getPassword()));</span>
+<span class="fc" id="L58">            userRepository.save(user);</span>
+<span class="fc" id="L59">            return &quot;redirect:/app/login&quot;;</span>
         }
-<span class="fc" id="L43">        return &quot;user/add&quot;;</span>
+<span class="fc" id="L61">        return &quot;user/add&quot;;</span>
     }
 
-    @GetMapping(&quot;/user/update/{id}&quot;) //ok
+    /**
+     * Affiche le formulaire de mise à jour d'un utilisateur existant.
+     *
+     * @param id    L'identifiant de l'utilisateur à mettre à jour
+     * @param model Le modèle pour la vue
+     * @return La vue &quot;user/update&quot;
+     */
+    @GetMapping(&quot;/user/update/{id}&quot;)
     public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
-<span class="fc" id="L48">        User user = userRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
-<span class="fc" id="L49">        user.setPassword(&quot;&quot;);</span>
-<span class="fc" id="L50">        model.addAttribute(&quot;user&quot;, user);</span>
-<span class="fc" id="L51">        return &quot;user/update&quot;;</span>
+<span class="fc" id="L73">        User user = userRepository.findById(id)</span>
+<span class="fc" id="L74">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
+<span class="fc" id="L75">        user.setPassword(&quot;&quot;); // Réinitialise le champ password pour éviter de l'afficher chiffré</span>
+<span class="fc" id="L76">        model.addAttribute(&quot;user&quot;, user);</span>
+<span class="fc" id="L77">        return &quot;user/update&quot;;</span>
     }
 
+    /**
+     * Met à jour un utilisateur existant.
+     *
+     * @param id     L'identifiant de l'utilisateur
+     * @param user   Les nouvelles données de l'utilisateur
+     * @param result Le résultat de la validation
+     * @param model  Le modèle pour la vue
+     * @return Redirection vers la liste des utilisateurs
+     */
     @PostMapping(&quot;/user/update/{id}&quot;)
     public String updateUser(@PathVariable(&quot;id&quot;) Integer id, @Valid User user,
                              BindingResult result, Model model) {
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
-<span class="fc" id="L58">            return &quot;user/update&quot;;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L93">            return &quot;user/update&quot;;</span>
         }
 
-<span class="fc" id="L61">        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
-<span class="fc" id="L62">        user.setPassword(encoder.encode(user.getPassword()));</span>
-<span class="fc" id="L63">        user.setId(id);</span>
-<span class="fc" id="L64">        userRepository.save(user);</span>
-<span class="fc" id="L65">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
-<span class="fc" id="L66">        return &quot;redirect:/user/list&quot;;</span>
+<span class="fc" id="L96">        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L97">        user.setPassword(encoder.encode(user.getPassword()));</span>
+<span class="fc" id="L98">        user.setId(id);</span>
+<span class="fc" id="L99">        userRepository.save(user);</span>
+<span class="fc" id="L100">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
+<span class="fc" id="L101">        return &quot;redirect:/user/list&quot;;</span>
     }
 
+    /**
+     * Supprime un utilisateur.
+     *
+     * @param id    L'identifiant de l'utilisateur à supprimer
+     * @param model Le modèle pour la vue
+     * @return Redirection vers la liste des utilisateurs
+     */
     @GetMapping(&quot;/user/delete/{id}&quot;)
     public String deleteUser(@PathVariable(&quot;id&quot;) Integer id, Model model) {
-<span class="fc" id="L71">        User user = userRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
-<span class="fc" id="L72">        userRepository.delete(user);</span>
-<span class="fc" id="L73">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
-<span class="fc" id="L74">        return &quot;redirect:/user/list&quot;;</span>
+<span class="fc" id="L113">        User user = userRepository.findById(id)</span>
+<span class="fc" id="L114">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
+<span class="fc" id="L115">        userRepository.delete(user);</span>
+<span class="fc" id="L116">        model.addAttribute(&quot;users&quot;, userRepository.findAll());</span>
+<span class="fc" id="L117">        return &quot;redirect:/user/list&quot;;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
