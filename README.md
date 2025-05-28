@@ -1,27 +1,73 @@
-# spring-boot
-## Technical:
+# 💼 Poseidon Capital Solutions
 
-1. Spring Boot 3.1.0
-2. Java 17
-3. Thymeleaf
-4. Bootstrap v.4.3.1
+Application web Java Spring Boot pour la gestion de données financières internes (bids, ratings, trades, etc.) avec authentification sécurisée.
+## 🔧 Technologies utilisées
+
+Java 21
+
+Spring Boot 3.1.0
+
+Spring Security
+
+Spring Data JPA
+
+Hibernate Validator
+
+MySQL
+
+Maven
+
+Thymeleaf
+
+JUnit 5
+
+JaCoCo
 
 
-## Setup with Intellij IDE
-1. Create project from Initializr: File > New > project > Spring Initializr
-2. Add lib repository into pom.xml
-3. Add folders
-    - Source root: src/main/java
-    - View: src/main/resources
-    - Static: src/main/resource/static
-4. Create database with name "demo" as configuration in application.properties
-5. Run sql script to create table doc/data.sql
+## 🚀 Installation
 
-## Implement a Feature
-1. Create mapping domain class and place in package com.nnk.springboot.domain
-2. Create repository class and place in package com.nnk.springboot.repositories
-3. Create controller class and place in package com.nnk.springboot.controllers
+### 1. Cloner le projet
+```bash
+git clone https://github.com/RomaneVnti/Poseidon_OC.git
+cd Poseidon_OC
+```
 
-## Security
-1. Create user service to load user from  database and place in package com.nnk.springboot.services
-2. Add configuration class and place in package com.nnk.springboot.config /a
+### 2. Créer la base de données MySQL
+   Avant de lancer l'application, il est nécessaire de créer une base de données sur ton serveur MySQL local. Exécute la commande suivante pour créer la base de données :
+```bash
+CREATE DATABASE demo;
+```
+
+### 3. Créer le fichier application.properties
+```bash
+cp src/main/resources/application-example.properties src/main/resources/application.properties
+```
+Puis ouvre src/main/resources/application.properties et modifie les informations suivantes :
+```bash
+spring.datasource.url=jdbc:mysql://localhost:3306/demo
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+```
+
+### 4. Installer les dépendances
+```bash
+mvn clean install
+```
+
+### 5. Lancer l'application
+```bash
+mvn spring-boot:run
+```
+
+## 📝 Utilisation
+Une fois l'application lancée, tu peux créer un compte en accédant à la route suivante dans ton navigateur :
+
+Route principale pour la création de compte : http://localhost:8080/app/login
+
+## 🧪 Tests
+```bash
+mvn clean verify
+```
+
+Un rapport JaCoCo sera généré dans target/site/jacoco/index.html pour la couverture des tests.
+
