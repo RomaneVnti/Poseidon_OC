@@ -2,12 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title> Spring Boot </title>
-    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="/css/home.css"/>
 </head>
 <body>
 <h3> HOME PAGE </h3>
 <p>
-    <a href="/login">Login</a> or create one <a href="/user/list">User management</a>
+<form th:action="@{/logout}" method="post" style="display:inline;">
+    <input type="submit" value="Logout" class="logout-button"/>
+</form>
 </p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
+            <a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
+            <a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
+            <a href="/trade/list">Trade</a>&nbsp;|&nbsp;
+            <a href="/ruleName/list">Rule</a>&nbsp;|&nbsp;
+            <a href="/user/list">User Management</a>
+        </div>
+    </div>
+
+    <p>Welcome, <span th:text="${username}">User</span>!</p>
+</div>
 </body>
 </html>

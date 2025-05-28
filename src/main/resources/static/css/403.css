@@ -1,0 +1,25 @@
+.logout-button {
+    font-weight: bold;
+    color: #dc3545;
+    background-color: transparent;
+    border: 2px solid #dc3545;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.home-link {
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.home-link:hover {
+    text-decoration: underline;
+}

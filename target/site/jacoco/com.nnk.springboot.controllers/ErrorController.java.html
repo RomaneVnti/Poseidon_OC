@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">ErrorController.java</span></div><h1>ErrorController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.Principal;
+
+/**
+ * Contrôleur pour la gestion des erreurs d'accès, notamment les erreurs 403 (Accès interdit).
+ */
+@Controller
+<span class="fc" id="L13">public class ErrorController {</span>
+
+    /**
+     * Gère l'affichage de la page d'erreur 403 (Accès refusé).
+     *
+     * @param model     le modèle utilisé pour transmettre les données à la vue
+     * @param principal l'utilisateur actuellement connecté (peut être null)
+     * @return la vue &quot;403&quot; (page d'erreur personnalisée)
+     */
+    @GetMapping(&quot;/403&quot;)
+    public String accessDenied(Model model, Principal principal) {
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (principal != null) {</span>
+<span class="fc" id="L25">            model.addAttribute(&quot;username&quot;, principal.getName());</span>
+        } else {
+<span class="fc" id="L27">            model.addAttribute(&quot;username&quot;, &quot;Invité&quot;);</span>
+        }
+
+<span class="fc" id="L30">        model.addAttribute(&quot;errorMsg&quot;, &quot;Vous n'êtes pas autorisé à accéder à cette page.&quot;);</span>
+<span class="fc" id="L31">        return &quot;403&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

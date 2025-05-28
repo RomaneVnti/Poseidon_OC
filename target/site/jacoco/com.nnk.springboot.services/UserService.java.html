@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.services</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.services;
+
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.nnk.springboot.domain.User;
+import com.nnk.springboot.repositories.UserRepository;
+
+import com.nnk.springboot.exception.UserExistingException;
+
+/**
+ * Service pour la gestion des utilisateurs (création, lecture, mise à jour, suppression).
+ */
+@Service
+<span class="fc" id="L20">public class UserService {</span>
+
+<span class="fc" id="L22">    private static final Logger logger = LogManager.getLogger(UserService.class);</span>
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    /**
+     * Récupère tous les utilisateurs.
+     *
+     * @return une liste contenant tous les utilisateurs
+     */
+    public List&lt;User&gt; getAllUsers() {
+        try {
+<span class="fc" id="L37">            logger.info(&quot;Tentative de récupération de la liste des utilisateurs.&quot;);</span>
+<span class="fc" id="L38">            List&lt;User&gt; userList = userRepository.findAll();</span>
+<span class="fc" id="L39">            logger.info(&quot;Liste des utilisateurs récupérée avec succès.&quot;);</span>
+<span class="fc" id="L40">            return userList;</span>
+<span class="nc" id="L41">        } catch (Exception e) {</span>
+<span class="nc" id="L42">            logger.error(&quot;Erreur lors de la récupération de la liste des utilisateurs.&quot;, e);</span>
+<span class="nc" id="L43">            throw new RuntimeException(&quot;Erreur lors de la récupération de la liste des utilisateurs.&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Récupère un utilisateur par son identifiant.
+     *
+     * @param id l'identifiant de l'utilisateur
+     * @return l'utilisateur correspondant
+     */
+    public User getUserById(Integer id) {
+        try {
+<span class="fc" id="L55">            logger.info(&quot;Récupération de l'utilisateur avec l'ID : {}&quot;, id);</span>
+<span class="fc" id="L56">            User user = userRepository.findById(id).orElseThrow();</span>
+<span class="fc" id="L57">            logger.info(&quot;Utilisateur avec l'ID {} récupéré avec succès.&quot;, id);</span>
+<span class="fc" id="L58">            return user;</span>
+<span class="nc" id="L59">        } catch (Exception e) {</span>
+<span class="nc" id="L60">            logger.error(&quot;Erreur lors de la récupération de l'utilisateur avec l'ID : {}&quot;, id, e);</span>
+<span class="nc" id="L61">            throw new RuntimeException(&quot;Erreur lors de la récupération de l'utilisateur.&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Ajoute un nouvel utilisateur après encodage du mot de passe.
+     * Vérifie également qu'aucun autre utilisateur n'a déjà le même nom d'utilisateur.
+     *
+     * @param user l'utilisateur à ajouter
+     * @return l'utilisateur ajouté
+     * @throws UserExistingException si un utilisateur avec le même nom d'utilisateur existe déjà
+     */
+    public User addUser(User user) {
+<span class="fc" id="L74">        logger.info(&quot;Ajout d'un nouvel utilisateur.&quot;);</span>
+
+<span class="fc" id="L76">        User userExisting = userRepository.findByUsername(user.getUsername());</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (userExisting != null) {</span>
+<span class="fc" id="L78">            logger.error(&quot;L'utilisateur {} existe déjà.&quot;, user.getUsername());</span>
+<span class="fc" id="L79">            throw new UserExistingException(&quot;L'utilisateur existe déjà.&quot;);</span>
+        }
+
+<span class="fc" id="L82">        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));</span>
+<span class="fc" id="L83">        User newUser = userRepository.save(user);</span>
+<span class="fc" id="L84">        logger.info(&quot;Utilisateur ajouté : {}&quot;, newUser);</span>
+<span class="fc" id="L85">        return newUser;</span>
+    }
+
+    /**
+     * Met à jour les informations d’un utilisateur existant.
+     *
+     * @param id   l'identifiant de l'utilisateur à mettre à jour
+     * @param user les nouvelles données utilisateur
+     * @return l'utilisateur mis à jour
+     * @throws UserExistingException si un autre utilisateur avec le même nom d'utilisateur existe
+     */
+    public User updateUser(Integer id, User user) {
+<span class="fc" id="L97">        logger.info(&quot;Mise à jour de l'utilisateur avec l'ID : {}&quot;, id);</span>
+
+<span class="fc" id="L99">        User userExisting = userRepository.findByUsername(user.getUsername());</span>
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        if (userExisting != null &amp;&amp; !userExisting.getId().equals(id)) {</span>
+<span class="fc" id="L101">            logger.info(&quot;Conflit sur le nom d'utilisateur : {}&quot;, user.getUsername());</span>
+<span class="fc" id="L102">            throw new UserExistingException(&quot;Un utilisateur avec ce nom d'utilisateur existe déjà.&quot;);</span>
+        }
+
+<span class="fc" id="L105">        String newPassword = bCryptPasswordEncoder.encode(user.getPassword());</span>
+<span class="fc" id="L106">        User userToUpdate = getUserById(id);</span>
+
+<span class="fc" id="L108">        userToUpdate.setRole(user.getRole());</span>
+<span class="fc" id="L109">        userToUpdate.setUsername(user.getUsername());</span>
+<span class="fc" id="L110">        userToUpdate.setFullname(user.getFullname());</span>
+<span class="fc" id="L111">        userToUpdate.setPassword(newPassword);</span>
+
+<span class="fc" id="L113">        User userUpdated = userRepository.save(userToUpdate);</span>
+<span class="fc" id="L114">        logger.info(&quot;Utilisateur avec l'ID {} mis à jour.&quot;, id);</span>
+<span class="fc" id="L115">        return userUpdated;</span>
+    }
+
+    /**
+     * Supprime un utilisateur par son identifiant.
+     *
+     * @param id l'identifiant de l'utilisateur à supprimer
+     */
+    public void deleteUser(Integer id) {
+<span class="fc" id="L124">        logger.info(&quot;Suppression de l'utilisateur avec l'ID : {}&quot;, id);</span>
+        try {
+<span class="fc" id="L126">            User userToDelete = getUserById(id);</span>
+<span class="fc" id="L127">            userRepository.delete(userToDelete);</span>
+<span class="fc" id="L128">            logger.info(&quot;Utilisateur avec l'ID {} supprimé.&quot;, id);</span>
+<span class="nc" id="L129">        } catch (Exception e) {</span>
+<span class="nc" id="L130">            logger.error(&quot;Erreur lors de la suppression de l'utilisateur avec l'ID : {}&quot;, id, e);</span>
+<span class="nc" id="L131">            throw new RuntimeException(&quot;Erreur lors de la suppression de l'utilisateur.&quot;, e);</span>
+<span class="fc" id="L132">        }</span>
+<span class="fc" id="L133">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
